@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reservationAPI", "reservationAPI\reservationAPI.csproj", "{B1E4B0E1-94F2-467A-9302-0D43443CFB71}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1E4B0E1-94F2-467A-9302-0D43443CFB71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1E4B0E1-94F2-467A-9302-0D43443CFB71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1E4B0E1-94F2-467A-9302-0D43443CFB71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1E4B0E1-94F2-467A-9302-0D43443CFB71}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {82C7CA33-041E-44CA-84BB-78F1AD7E9DE3}
+	EndGlobalSection
+EndGlobal
