@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using reservationAPI.Data;
 
@@ -11,9 +12,11 @@ using reservationAPI.Data;
 namespace reservationAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240511200330_FixedSomeIssue")]
+    partial class FixedSomeIssue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +56,7 @@ namespace reservationAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Apartments", (string)null);
+                    b.ToTable("Apartments");
 
                     b.HasData(
                         new
@@ -110,7 +113,7 @@ namespace reservationAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Booking", (string)null);
+                    b.ToTable("Booking");
                 });
 
             modelBuilder.Entity("reservationAPI.Models.User", b =>
@@ -143,7 +146,7 @@ namespace reservationAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("reservationAPI.Models.Booking", b =>

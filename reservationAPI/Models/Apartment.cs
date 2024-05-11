@@ -10,8 +10,6 @@
         public string Location { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
 
-        public List<User>? Users { get; set; }
-
         public List<Booking>? Bookings { get; set; } 
     }
 }

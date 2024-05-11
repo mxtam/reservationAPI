@@ -14,17 +14,12 @@ namespace reservationAPI.Data
 
         public DataContext(DbContextOptions<DataContext> options):base(options) 
         {
-
+ 
         }
 
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Apartment)
-                .WithMany(c => c.Users)
-                .HasForeignKey(u => u.ApartmentId);
-
             modelBuilder.Entity<Apartment>().HasData(
                 new Apartment { Id = 1, Name = "King`s Luxe", Rooms = 5, Description = "King`s Luxe with 5 rooms", 
                     Location = "м.Київ", MaxGuests = 4, PricePerDay = 80000.00m },
