@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using reservationAPI.Data;
 
@@ -11,9 +12,11 @@ using reservationAPI.Data;
 namespace reservationAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240511115800_AddedApartmentModel")]
+    partial class AddedApartmentModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,6 +36,12 @@ namespace reservationAPI.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EntranceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LeavingDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -54,63 +63,6 @@ namespace reservationAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Apartments");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "King`s Luxe with 5 rooms",
-                            Location = "м.Київ",
-                            MaxGuests = 4,
-                            Name = "King`s Luxe",
-                            PricePerDay = 80000.00m,
-                            Rooms = 5
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Luxe with 4 rooms",
-                            Location = "м.Київ",
-                            MaxGuests = 4,
-                            Name = "Luxe",
-                            PricePerDay = 60000.00m,
-                            Rooms = 4
-                        });
-                });
-
-            modelBuilder.Entity("reservationAPI.Models.Booking", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ApartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Entry")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Guests")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Leave")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApartmentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Booking");
                 });
 
             modelBuilder.Entity("reservationAPI.Models.User", b =>
@@ -121,7 +73,7 @@ namespace reservationAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ApartmentId")
+                    b.Property<int>("ApartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -151,40 +103,20 @@ namespace reservationAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("reservationAPI.Models.Booking", b =>
-                {
-                    b.HasOne("reservationAPI.Models.Apartment", "Apartment")
-                        .WithMany("Bookings")
-                        .HasForeignKey("ApartmentId");
-
-                    b.HasOne("reservationAPI.Models.User", "User")
-                        .WithMany("Bookings")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Apartment");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("reservationAPI.Models.User", b =>
                 {
                     b.HasOne("reservationAPI.Models.Apartment", "Apartment")
                         .WithMany("Users")
-                        .HasForeignKey("ApartmentId");
+                        .HasForeignKey("ApartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Apartment");
                 });
 
             modelBuilder.Entity("reservationAPI.Models.Apartment", b =>
                 {
-                    b.Navigation("Bookings");
-
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("reservationAPI.Models.User", b =>
-                {
-                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

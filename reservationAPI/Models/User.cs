@@ -9,5 +9,9 @@
         public byte[] PasswordHash { get; set; } = new byte[0];
         public byte[] PasswordSalt { get; set; } = new byte[0];
 
+        public int? ApartmentId { get; set; }
+        public Apartment? Apartment { get; set; }
+
+        public List<Booking>? Bookings { get; set; }
     }
 }

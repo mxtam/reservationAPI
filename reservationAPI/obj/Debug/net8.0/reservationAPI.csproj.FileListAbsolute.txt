@@ -138,3 +138,4 @@ C:\Users\Ілля\source\repos\reservationAPI\reservationAPI\bin\Debug\net8.0\Mi
 C:\Users\Ілля\source\repos\reservationAPI\reservationAPI\bin\Debug\net8.0\Scrutor.dll
 C:\Users\Ілля\source\repos\reservationAPI\reservationAPI\bin\Debug\net8.0\Swashbuckle.AspNetCore.Filters.dll
 C:\Users\Ілля\source\repos\reservationAPI\reservationAPI\bin\Debug\net8.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
+C:\Users\Ілля\source\repos\reservationAPI\reservationAPI\obj\Debug\net8.0\reservationAPI.sourcelink.json
