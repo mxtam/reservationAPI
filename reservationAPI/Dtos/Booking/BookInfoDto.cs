@@ -1,5 +1,6 @@
 ﻿namespace reservationAPI.Dtos.Booking
 {
+    //DTO для виводу інформації про бронь
     public class BookInfoDto
     {
         public int Id { get; set; }

@@ -1,5 +1,6 @@
 ﻿namespace reservationAPI.Dtos.Apartment
 {
+    //DTO для виведення житла
     public class ApartmentGetDto
     {
         public int Id { get; set; }

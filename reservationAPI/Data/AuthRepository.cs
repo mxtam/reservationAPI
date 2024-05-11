@@ -17,10 +17,13 @@ namespace reservationAPI.Data
             _configuration = configuration;
         }
 
+        //Метод дял входу клієнта
         public async Task<ServiceResponse<string>> Login(string email, string password)
         {
             var response = new ServiceResponse<string>();
+            //Шукаємо користувача за його email
             var user = await _context.Users.FirstOrDefaultAsync(u=>u.Email.ToLower().Equals(email.ToLower()));
+            //Перевірка коректності даних
             if (user is null)
             {
                 response.Success = false;
@@ -33,34 +36,42 @@ namespace reservationAPI.Data
             }
             else 
             {
+                // В випадку коректного введення користувача створюємо токен та відправляємо його
                 response.Data = CreateToken(user);
             }
 
             return response;
         }
 
+        //Метод для реєстрації користувача
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
             var response = new ServiceResponse<int>();
-
+            //Перевірка чи користувач вже зареєстрований 
             if (await UserExist(user.Email))
             { 
                 response.Success = false;
                 response.Message = "User already exists.";
                 return response;
             }
+
+            //Хешуємо пароль
             CreatePasswordhash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
+            //Додаємо користувача до БД
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            //Відправка відповіді
             response.Data=user.Id;
+            response.Message = "New user created";
             return response;
         }
 
+        //Перевірка чи користувач вже існує
         public async Task<bool> UserExist(string email)
         {
             if (await _context.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower()))
@@ -70,6 +81,7 @@ namespace reservationAPI.Data
             return false;
         }
 
+        //Створення хешу для пароля
         private void CreatePasswordhash(string password, out byte[] passwordHash, out byte[] passwordSalt) 
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
@@ -79,6 +91,7 @@ namespace reservationAPI.Data
             }
         }
 
+        //Перевірка хешу пароля
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
@@ -88,6 +101,7 @@ namespace reservationAPI.Data
             }
         }
 
+        //Метод для створення JWT токена
         private string CreateToken(User user)
         {
             var claims = new List<Claim>

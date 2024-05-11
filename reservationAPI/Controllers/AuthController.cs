@@ -5,6 +5,7 @@ using reservationAPI.Models;
 
 namespace reservationAPI.Controllers
 {
+    //Контролер автентифікації
     [ApiController]
     [Route("[controller]")]
     public class AuthController : ControllerBase
@@ -17,7 +18,7 @@ namespace reservationAPI.Controllers
             _authRepository= authRepository;
         }
 
-
+        //Метод для реєстрації
         [HttpPost("Register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request) 
         {
@@ -31,6 +32,7 @@ namespace reservationAPI.Controllers
             return Ok(response);
         }
 
+        //Метод для входу
         [HttpPost("Login")]
         public async Task<ActionResult<ServiceResponse<int>>> Login(UserLoginDto request)
         {

@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace reservationAPI.Dtos.User
-{
+{   
+    //DTO для входу користувача
     public class UserLoginDto
     {
         [Required]

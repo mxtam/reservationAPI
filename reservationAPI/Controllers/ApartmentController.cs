@@ -14,7 +14,7 @@ namespace reservationAPI.Controllers
         {
             _service = service;
         }
-
+        //Повертаємо список доступного житла
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<Apartment>>>> GetAll ()
         {
@@ -29,6 +29,7 @@ namespace reservationAPI.Controllers
 
         }
 
+        //Повретаємо житло за Id
         [HttpGet("GetById/{id}")]
         public async Task<ActionResult<ServiceResponse<List<Apartment>>>> GetById(int id)
         {

@@ -15,14 +15,23 @@ namespace reservationAPI.Services.BookingServices
             _dataContext = dataContext;
         }
 
+        //Метод для бронювання житла
         public async Task<ServiceResponse<BookApartmentDto>> Booking(int apartmentId, int userId, BookApartmentDto bookDto)
-        {
+        {  
             var response = new ServiceResponse<BookApartmentDto>();
             Booking booking = new Booking();
 
             var apartment = await _dataContext.Apartments.FindAsync(apartmentId);
 
-            if (bookDto.Entry >= bookDto.Leave || bookDto.Leave <= bookDto.Entry)
+            //Перевіряємо на null
+            if (bookDto is null)
+            {
+                response.Success = false;
+                response.Message = "Something went wrong";
+                return response;
+            }
+            //Перевірка на коректність введених даних
+            else if (bookDto.Entry >= bookDto.Leave || bookDto.Leave <= bookDto.Entry)
             {
                 response.Success = false;
                 response.Message = "Incorrect date";
@@ -35,11 +44,12 @@ namespace reservationAPI.Services.BookingServices
                 return response;
             }
 
+            //Перевіряємо чи житло вже заброньоване
             var existingBooking = await _dataContext.Booking
                                             .AnyAsync(b => b.ApartmentId == apartmentId &&
                                                                 b.Entry < bookDto.Leave &&
                                                                     b.Leave > bookDto.Entry);
-
+            //Перевіряємо чи житло вже заброньоване
             if (existingBooking)
             {
                 response.Success = false;
@@ -47,6 +57,7 @@ namespace reservationAPI.Services.BookingServices
                 return response; 
             }
 
+            //Додаємо до БД
             booking.ApartmentId = apartmentId;
             booking.UserId = userId;
             booking.Guests = bookDto.Guests;
@@ -58,25 +69,22 @@ namespace reservationAPI.Services.BookingServices
             await _dataContext.AddAsync(booking);
             await _dataContext.SaveChangesAsync();
 
-            if (bookDto is null)
-            {
-                response.Success = false;
-                response.Message = "Something went wrong";
-                return response;
-            }
-
+            //Відправка відповіді
             response.Data = bookDto;
 
             return response;
         }
 
+        //Метод для відміни бронювання
         public async Task<ServiceResponse<string>> CancelBooking(int id, int userId)
         {
             var response = new ServiceResponse<string>();
 
+            //Знаходимо потрібне нам бронювання
             var deleteBook = await _dataContext.Booking
                                                 .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == id);
 
+            //Перевірка на null
             if (deleteBook is null)
             {
                 response.Success = false;
@@ -84,24 +92,30 @@ namespace reservationAPI.Services.BookingServices
                 return response;
             }
 
+            //Видалення з БД
             _dataContext.Remove(deleteBook);
             await _dataContext.SaveChangesAsync();
 
+            //Відправка відповіді
             response.Data = "Booking canceled";
 
             return response;
 
         }
 
+        //Метод для редагування броні
         public async Task<ServiceResponse<BookingEditDto>> EditBooking(int id, int userId, BookingEditDto editDto)
         {
             var response = new ServiceResponse<BookingEditDto>();
 
+            //Знаходимо бронь на зміну
             var editBooking = await _dataContext.Booking
                                                 .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == id);
 
+            //Знаходимо заброньоване житло
             var apartment = await _dataContext.Apartments.FirstOrDefaultAsync(x=>x.Id == editBooking.ApartmentId);
 
+            //Перевірка на введення та null
             if (editBooking is null)
             { 
                 response.Success=false;
@@ -134,6 +148,7 @@ namespace reservationAPI.Services.BookingServices
                 return response;
             }
 
+            //Вносимо зміни до БД
             editBooking.Entry = editDto.Entry;
             editBooking.Leave = editDto.Leave;  
             editBooking.Guests = editDto.Guests;
@@ -141,15 +156,18 @@ namespace reservationAPI.Services.BookingServices
             _dataContext.Update(editBooking);
             await _dataContext.SaveChangesAsync();
 
+            //Відправка відповіді
             response.Data = editDto;
             return response;
 
         }
 
+        //Метод для перегляду бронювання клієнта
         public async Task<ServiceResponse<List<BookInfoDto>>> MyBookings(int userId)
         {
             var response = new ServiceResponse<List<BookInfoDto>>();
 
+            //Шукаємо всі бронювання клієнта
             var books = await _dataContext.Booking.Where(x => x.UserId == userId).Select(b => new BookInfoDto
             {
                 Id = b.Id,
@@ -161,11 +179,15 @@ namespace reservationAPI.Services.BookingServices
                 TotalPrice = (decimal)(b.Leave - b.Entry).TotalDays * b.Apartment.PricePerDay
             }).ToListAsync();
 
+            //Перевірка на null
             if (books is null)
             {
                 response.Success = false;
                 response.Message = "Your booking list is empty";
+                return response;
             }
+
+            //Відправка відповіді
             response.Data = books;
 
             return response;
